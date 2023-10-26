@@ -1,33 +1,29 @@
-// Function to generate a random number between min and max
-function getRandomTime(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+window.promises = [];
+
+// Do not change the code above this
+// add your promises to the array `promises`
+// Function to generate a random time between 1 and 5 seconds
+function getRandomTime() {
+  return Math.random() * 4000 + 1000; // Random time between 1 and 5 seconds in milliseconds
 }
 
-// Add your promises to the `promises` array
+// Create an array of promises with random resolve times
 for (let i = 0; i < 5; i++) {
-  // Generate a random time between 1 and 5 seconds
-  const randomTime = getRandomTime(1000, 5000);
-
-  // Create a promise that resolves after the random time
-  const promise = new Promise((resolve, reject) => {
+  const promise = new Promise((resolve) => {
+    const randomTime = getRandomTime();
     setTimeout(() => {
-      resolve(`Promise ${i + 1} resolved in ${randomTime} milliseconds`);
+      resolve(`Promise ${i + 1} resolved in ${randomTime / 1000} seconds`);
     }, randomTime);
   });
-
-  // Push the promise into the `promises` array
-  window.promises.push(promise);
+  promises.push(promise);
 }
 
-// Use Promise.any() to wait for the first promise to resolve
-Promise.any(window.promises)
+// Use Promise.any to wait for the first promise to resolve
+Promise.any(promises)
   .then((result) => {
-    // Get the output div element
-    const outputDiv = document.getElementById("output");
-
-    // Display the result in the div
-    outputDiv.innerText = result;
+    // Print the result to the "output" div
+    document.getElementById("output").textContent = result;
   })
   .catch((error) => {
-    console.error("All promises were rejected:", error);
+    console.error("All promises failed:", error);
   });
